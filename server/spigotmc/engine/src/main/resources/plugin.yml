@@ -1,0 +1,6 @@
+name: MCEngineAchievement
+version: ${version}
+main: io.github.mcengine.spigotmc.achievement.engine.MCEngineAchievementSpigotMC
+author: MCEngine
+description: MCEngine Achievement
+api-version: 1.13
