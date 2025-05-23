@@ -17,7 +17,7 @@ ext {
     git_organization_token = System.getenv('GIT_ORGANIZATION_TOKEN') ?: 'null'
 
     // Repository
-    git_repository_name = System.getenv('GIT_REPOSITORY_NAME') ?: 'achievement'
+    git_repository_name = System.getenv('GIT_REPOSITORY_NAME') ?: 'achievement-api'
     git_repository_token = System.getenv('GIT_REPOSITORY_TOKEN') ?: 'null'
 
     /* Project Information */
@@ -64,17 +64,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    def versionPropertyKey = project.path.replace(':', '-')
-    if (versionPropertyKey.startsWith('-')) {
-        versionPropertyKey = versionPropertyKey.substring(1)
-    }
-
-    if (!versionPropertyKey.contains('-')) {
-        versionPropertyKey = project.name
-    }
-
-    versionPropertyKey += '.version'
-    version = project.properties[versionPropertyKey] ?: 'undefined'
+    version = project.properties[project.name + '.version'] ?: 'undefined'
 
     tasks.named('jar').configure {
         enabled = false
@@ -84,26 +74,7 @@ subprojects {
         archiveClassifier = null
     }
 
-    afterEvaluate {
-        def serverPlatforms = ['spigotmc', 'papermc']
-        serverPlatforms.each { platform ->
-            if (project.path == ":server:${platform}:engine") {
-                dependencies {
-                    def platformDir = rootProject.file("server/${platform}")
-                    if (platformDir.exists()) {
-                        platformDir.eachDir { versionDir ->
-                            if (versionDir.name != 'engine') {
-                                def versionPath = ":server:${platform}:${versionDir.name}"
-                                implementation project(path: versionPath, configuration: 'shadow')
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if (project.path == ":mcengine-${project.git_repository_name}-api") {
+    if (project.path == ":mcengine-achievement-api") {
         apply plugin: 'maven-publish'
 
         publishing {
@@ -148,13 +119,7 @@ subprojects {
 }
 
 dependencies {
-    implementation project(path: ":mcengine-${project.git_repository_name}-api", configuration: 'shadow')
-    implementation project(path: ":common", configuration: 'shadow')
-
-    def platformModules = ['spigotmc', 'papermc']
-    platformModules.each { platform ->
-        implementation project(path: ":server:${platform}:engine", configuration: 'shadow')
-    }
+    implementation project(path: ":mcengine-achievement-api", configuration: 'shadow')
 }
 
 shadowJar {

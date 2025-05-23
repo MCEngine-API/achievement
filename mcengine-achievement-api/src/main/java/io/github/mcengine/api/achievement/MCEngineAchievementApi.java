@@ -44,10 +44,7 @@ public class MCEngineAchievementApi {
      */
     public MCEngineAchievementApi(Plugin plugin) {
         instance = this;
-        new Metrics(plugin, 25749);
         this.plugin = plugin;
-        loadAddOns();
-        loadDLCs();
 
         // Initialize database based on type
         String dbType = plugin.getConfig().getString("database.type", "sqlite").toLowerCase();
@@ -98,21 +95,5 @@ public class MCEngineAchievementApi {
      */
     public void checkUpdate(String gitPlatform, String org, String repository, String token) {
         MCEngineApiUtilUpdate.checkUpdate(plugin, gitPlatform, org, repository, token);
-    }
-
-    /**
-     * Loads all addons from the "addons" directory.
-     * Uses extension loader to handle AddOn registration.
-     */
-    private void loadAddOns() {
-        MCEngineApiUtilExtension.loadExtensions(plugin, "addons", "AddOn");
-    }
-
-    /**
-     * Loads all DLCs from the "dlcs" directory.
-     * Uses extension loader to handle DLC registration.
-     */
-    private void loadDLCs() {
-        MCEngineApiUtilExtension.loadExtensions(plugin, "dlcs", "DLC");
     }
 }
