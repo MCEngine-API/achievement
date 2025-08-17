@@ -1,7 +1,1 @@
 rootProject.name = 'mcengine-achievement'
-
-// Define base directories for subprojects
-def coreProjects = ['mcengine-achievement-api']
-coreProjects.each {
-    include ":$it"
-}
